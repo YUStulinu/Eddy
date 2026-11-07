@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Eddy — flow in your browser</title>
+  </head>
+  <body>
+    <header>
+      <h1>Eddy</h1>
+      <p>A lattice Boltzmann fluid running on your GPU. Draw obstacles with the mouse (right button erases).</p>
+    </header>
+    <main>
+      <div id="stage"><canvas id="canvas"></canvas></div>
+      <aside>
+        <label>Obstacle
+          <select id="shape">
+            <option value="cylinder">Cylinder</option>
+            <option value="airfoil">Airfoil (NACA 0012, 12°)</option>
+            <option value="plate">Flat plate</option>
+            <option value="two-cylinders">Two cylinders</option>
+            <option value="none">Nothing (draw your own)</option>
+          </select>
+        </label>
+        <label>Or load an image (dark = solid) <input id="image" type="file" accept="image/*" /></label>
+        <label>Reynolds number <span id="re-value"></span>
+          <input id="re" type="range" min="1.3" max="4" step="0.01" value="2.3" />
+        </label>
+        <label>Show
+          <select id="mode">
+            <option value="vorticity">Vorticity</option>
+            <option value="speed">Speed</option>
+          </select>
+        </label>
+        <label class="row"><input id="particles" type="checkbox" checked /> Tracer particles</label>
+        <label class="row"><input id="walls" type="checkbox" /> Walls top and bottom (else periodic)</label>
+        <label>Steps per frame <span id="spf-value"></span>
+          <input id="spf" type="range" min="1" max="40" step="1" value="12" />
+        </label>
+        <div class="buttons"><button id="pause" type="button">Pause</button><button id="reset" type="button">Reset</button></div>
+        <dl id="stats"></dl>
+        <p class="note">The same scheme as the CUDA solver: D2Q9, TRT collision, halfway bounce-back. Inflow on the left at 0.1 lattice units; the Reynolds number uses the obstacle's height (a sixth of the channel).</p>
+      </aside>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

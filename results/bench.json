@@ -1,0 +1,204 @@
+{
+ "gpu": "NVIDIA GeForce RTX 2060",
+ "cpu_threads": 16,
+ "runs": [
+  {
+   "lattice": "d2q9",
+   "n": 256,
+   "cells": 65536,
+   "backend": "gpu",
+   "steps": 30517,
+   "seconds": 0.9161,
+   "mlups": 2183.11,
+   "effective_gb_s": 159.37,
+   "threads": null
+  },
+  {
+   "lattice": "d2q9",
+   "n": 512,
+   "cells": 262144,
+   "backend": "gpu",
+   "steps": 7629,
+   "seconds": 0.8124,
+   "mlups": 2461.77,
+   "effective_gb_s": 179.71,
+   "threads": null
+  },
+  {
+   "lattice": "d2q9",
+   "n": 1024,
+   "cells": 1048576,
+   "backend": "gpu",
+   "steps": 1907,
+   "seconds": 0.792,
+   "mlups": 2524.71,
+   "effective_gb_s": 184.3,
+   "threads": null
+  },
+  {
+   "lattice": "d2q9",
+   "n": 2048,
+   "cells": 4194304,
+   "backend": "gpu",
+   "steps": 476,
+   "seconds": 0.7775,
+   "mlups": 2567.95,
+   "effective_gb_s": 187.46,
+   "threads": null
+  },
+  {
+   "lattice": "d2q9",
+   "n": 4096,
+   "cells": 16777216,
+   "backend": "gpu",
+   "steps": 119,
+   "seconds": 0.776,
+   "mlups": 2572.7,
+   "effective_gb_s": 187.81,
+   "threads": null
+  },
+  {
+   "lattice": "d2q9",
+   "n": 512,
+   "cells": 262144,
+   "backend": "cpu",
+   "steps": 762,
+   "seconds": 42.876,
+   "mlups": 4.66,
+   "effective_gb_s": 0.34,
+   "threads": 1
+  },
+  {
+   "lattice": "d2q9",
+   "n": 512,
+   "cells": 262144,
+   "backend": "cpu",
+   "steps": 762,
+   "seconds": 7.1653,
+   "mlups": 27.88,
+   "effective_gb_s": 2.04,
+   "threads": 16
+  },
+  {
+   "lattice": "d2q9",
+   "n": 1024,
+   "cells": 1048576,
+   "backend": "cpu",
+   "steps": 190,
+   "seconds": 42.2924,
+   "mlups": 4.71,
+   "effective_gb_s": 0.34,
+   "threads": 1
+  },
+  {
+   "lattice": "d2q9",
+   "n": 1024,
+   "cells": 1048576,
+   "backend": "cpu",
+   "steps": 190,
+   "seconds": 6.224,
+   "mlups": 32.01,
+   "effective_gb_s": 2.34,
+   "threads": 16
+  },
+  {
+   "lattice": "d3q19",
+   "n": 32,
+   "cells": 32768,
+   "backend": "gpu",
+   "steps": 61035,
+   "seconds": 1.9861,
+   "mlups": 1007.0,
+   "effective_gb_s": 154.07,
+   "threads": null
+  },
+  {
+   "lattice": "d3q19",
+   "n": 64,
+   "cells": 262144,
+   "backend": "gpu",
+   "steps": 7629,
+   "seconds": 1.6242,
+   "mlups": 1231.32,
+   "effective_gb_s": 188.39,
+   "threads": null
+  },
+  {
+   "lattice": "d3q19",
+   "n": 128,
+   "cells": 2097152,
+   "backend": "gpu",
+   "steps": 953,
+   "seconds": 1.5792,
+   "mlups": 1265.57,
+   "effective_gb_s": 193.63,
+   "threads": null
+  },
+  {
+   "lattice": "d3q19",
+   "n": 192,
+   "cells": 7077888,
+   "backend": "gpu",
+   "steps": 282,
+   "seconds": 1.6632,
+   "mlups": 1200.09,
+   "effective_gb_s": 183.61,
+   "threads": null
+  },
+  {
+   "lattice": "d3q19",
+   "n": 256,
+   "cells": 16777216,
+   "backend": "gpu",
+   "steps": 119,
+   "seconds": 1.583,
+   "mlups": 1261.18,
+   "effective_gb_s": 192.96,
+   "threads": null
+  },
+  {
+   "lattice": "d3q19",
+   "n": 64,
+   "cells": 262144,
+   "backend": "cpu",
+   "steps": 762,
+   "seconds": 132.6433,
+   "mlups": 1.51,
+   "effective_gb_s": 0.23,
+   "threads": 1
+  },
+  {
+   "lattice": "d3q19",
+   "n": 64,
+   "cells": 262144,
+   "backend": "cpu",
+   "steps": 762,
+   "seconds": 20.1742,
+   "mlups": 9.9,
+   "effective_gb_s": 1.51,
+   "threads": 16
+  },
+  {
+   "lattice": "d3q19",
+   "n": 128,
+   "cells": 2097152,
+   "backend": "cpu",
+   "steps": 95,
+   "seconds": 134.3737,
+   "mlups": 1.48,
+   "effective_gb_s": 0.23,
+   "threads": 1
+  },
+  {
+   "lattice": "d3q19",
+   "n": 128,
+   "cells": 2097152,
+   "backend": "cpu",
+   "steps": 95,
+   "seconds": 18.1472,
+   "mlups": 10.98,
+   "effective_gb_s": 1.68,
+   "threads": 16
+  }
+ ]
+}

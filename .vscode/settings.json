@@ -1,0 +1,9 @@
+{
+  "cmake.buildDirectory": "${workspaceFolder}/build",
+  "cmake.configureSettings": { "EDDY_CUDA": "ON" },
+  "files.associations": { "*.cu": "cuda-cpp" },
+  "python.defaultInterpreterPath": "${workspaceFolder}/validation/.venv/Scripts/python.exe",
+  "python.testing.pytestEnabled": true,
+  "python.testing.cwd": "${workspaceFolder}/validation",
+  "python.testing.pytestArgs": ["tests"]
+}

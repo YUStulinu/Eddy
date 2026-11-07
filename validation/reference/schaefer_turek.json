@@ -1,0 +1,5 @@
+{
+  "source": "FeatFlow DFG benchmark pages, TU Dortmund: https://wwwold.mathematik.tu-dortmund.de/~featflow/en/benchmarks/cfdbenchmarking/flow/dfg_benchmark1_re20.html and .../dfg_benchmark2_re100.html (Schafer & Turek 1996 configuration)",
+  "2D-1": {"re": 20, "cd": 5.57953523384, "cl": 0.010618948146, "note": "high-order spectral reference quoted on the page"},
+  "2D-2": {"re": 100, "cd_max": 3.2200, "cl_max": 0.9859, "st": 0.30188, "note": "finest FeatFlow level on the page (level 6, time step 1/200)"}
+}

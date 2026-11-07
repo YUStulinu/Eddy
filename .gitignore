@@ -1,0 +1,8 @@
+build/
+out/
+.venv/
+__pycache__/
+.pytest_cache/
+node_modules/
+dist/
+results/validation-quick.json

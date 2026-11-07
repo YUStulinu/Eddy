@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  cpu:
+    # The hosted runners have no GPU: build the CPU solver, run its tests (the CPU-vs-GPU ones
+    # skip), then the Python checks and a small validation against the analytical and published
+    # solutions.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -DEDDY_CUDA=OFF -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --config Release --parallel
+      - name: Tests
+        run: ctest --test-dir build -C Release --output-on-failure
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Python dependencies
+        run: pip install -r validation/requirements.txt
+      - name: Python tests
+        working-directory: validation
+        run: python -m pytest -q tests
+      - name: Quick validation (Poiseuille, cavity at Re 100)
+        working-directory: validation
+        run: python -m eddy_validation.validate --quick
+
+  cuda:
+    # Compiles the CUDA solver (no GPU to run it on).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Jimver/cuda-toolkit@v0.2.19
+        with:
+          cuda: "12.6.0"
+          method: network
+          sub-packages: '["nvcc", "cudart"]'
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CUDA_ARCHITECTURES="75;86;89"
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Tests (CPU part; GPU tests skip without a device)
+        run: ctest --test-dir build --output-on-failure
+
+  viewer:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: viewer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
