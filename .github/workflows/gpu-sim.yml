@@ -1,0 +1,79 @@
+name: GPU Simulator
+
+# Optional, non-required check. The hosted runners have no GPU, so the cuda job
+# in ci.yml only compiles the solver and the CPU-vs-GPU test skips. This builds
+# the CUDA solver again and runs eddy_tests on a simulated NVIDIA H100
+# (https://github.com/pantheongpu/pantheonsim), so the D2Q9 and D3Q19 GPU
+# kernels are compared against the CPU solver. A simulator cannot reproduce
+# hardware-specific behavior or timing, so it complements real-GPU testing and
+# does not replace it.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "CMakeLists.txt"
+      - ".github/workflows/gpu-sim.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ctest:
+    name: eddy_tests (CUDA 13.0 and simulated H100)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      - name: Set up the simulated GPU and CUDA toolkit
+        uses: pantheongpu/setup-pantheonsim@deff5781e8adfd83dec98dd5242dcbc96a564773 # v0.1.10
+        with:
+          gpu: nvidia/h100
+          cuda-toolkit: "13.0"
+
+      # 90-virtual embeds PTX only, which the simulator runs, and the simulator
+      # needs a shared CUDA runtime.
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DEDDY_CUDA=ON \
+            -DCMAKE_CUDA_COMPILER=/usr/local/cuda-13.0/bin/nvcc \
+            -DCMAKE_CUDA_ARCHITECTURES=90-virtual \
+            -DCMAKE_CUDA_RUNTIME_LIBRARY=Shared
+
+      - name: Build
+        run: cmake --build build -j3
+
+      # eddy_tests prints "skip: no CUDA device" and still passes when there is
+      # no device, and a wrong-architecture run can print a VirtualGPU error and
+      # exit 0, so the output is searched for both as well.
+      - name: Test
+        working-directory: build
+        run: |
+          vgpu run --counters ctest --output-on-failure -V > ../ctest.log 2>&1 || { tail -n 150 ../ctest.log; exit 1; }
+          grep -E "virtual GPU platform initialized|FAIL|all tests passed|failure|tests passed|Skipped|Not Run" ../ctest.log
+          grep -q "virtual GPU platform initialized: 1 x nvidia/h100" ../ctest.log
+          if grep -qiE "VirtualGPU error|no CUDA device|no CUDA-capable|\*\*\*Skipped|Not Run|tests were not run" ../ctest.log; then
+            echo "::error::the run reported a device problem or a skipped test"; exit 1
+          fi
+          grep -q "all tests passed" ../ctest.log
+          grep -q "100% tests passed, 0 tests failed out of 1" ../ctest.log
+          # The simulator's per-launch counters show that the GPU solver ran.
+          for k in k_step k_fields; do
+            echo "$k launches: $(grep -c "\[vgpu\]\[counters\].*$k" ../ctest.log)"
+            grep -q "\[vgpu\]\[counters\].*$k" ../ctest.log
+          done
